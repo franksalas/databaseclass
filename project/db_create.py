@@ -16,15 +16,16 @@ with sqlite3.connect(DATABASE_PATH) as connection:
 			product_Code TEXT NOT NULL,
 			blood_Group TEXT NOT NULL,
 			exp_Date TEXT NOT NULL,
-			product_Vol INTEGER NOT NULL
+			product_Vol INTEGER NOT NULL,
+			status INTERGER NOT NULL
 			)""")
 
 	# insert dummy data into table
 	c.execute(
-		'INSERT INTO Products (donor_Id, product_Code, blood_Group, exp_Date, product_Vol)'
-		'VALUES("W044615330058","E3077V00","AB","05/10/15", 200)'
+		'INSERT INTO Products (donor_Id, product_Code, blood_Group, exp_Date, product_Vol, status)'
+		'VALUES("W044615330058","E3077V00","AB","05/10/15", 200, 1)'
 		)
 	c.execute(
-		'INSERT INTO Products (donor_Id, product_Code, blood_Group, exp_Date, product_Vol)'
-		'VALUES("W044615192058","E3054V00","A","05/14/15", 120)'
+		'INSERT INTO Products (donor_Id, product_Code, blood_Group, exp_Date, product_Vol, status)'
+		'VALUES("W044615192058","E3054V00","A","05/14/15", 120, 1)'
 		)
