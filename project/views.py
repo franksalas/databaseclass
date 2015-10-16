@@ -1,13 +1,12 @@
 # project/views.py
 
 
-# import sqlite3
-from functools import wraps
 
+from functools import wraps
 from flask import Flask, flash, redirect, render_template, \
     request, session, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
-from forms import AddProductForm
+from forms import AddProductForm, RegisterForm, LoginForm
 
 
 # config
@@ -15,13 +14,11 @@ from forms import AddProductForm
 app = Flask(__name__)
 app.config.from_object('_config')
 db = SQLAlchemy(app)
-from models import Product
+
+from models import Product, User
 
 
 # helper functions
-
-# def connect_db():
-#     return sqlite3.connect(app.config['DATABASE_PATH'])
 
 
 def login_required(test):
@@ -47,44 +44,37 @@ def logout():
 @app.route('/', methods=['GET', 'POST'])
 def login():
     error = None
+    form = LoginForm(request.form)
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME'] or \
-                request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid Credentials. Please try again.'
-            return render_template('login.html', error=error)
+        if form.validate_on_submit():
+            user = User.query.filter_by(name=request.form['name']).first()
+            if user is not None and user.password == request.form['password']:
+                session['logged_in'] = True
+                flash('Welcome!')
+                return redirect(url_for('products'))
+            else:
+                error = 'Invalid username or password.'
         else:
-            session['logged_in'] = True
-            flash('Welcome!')
-            return redirect(url_for('products'))
-    return render_template('login.html')
+            error = 'Both fields are required.'
+    return render_template('login.html', form=form, error=error)
 
 
-
-# @app.route('/prdoucts/')
-# @login_required
-# def products():
-#     g.db = connect_db()
-#     cur = g.db.execute(
-#         'select donor_Id, product_Code, blood_Group, exp_Date, product_Vol, product_id from products where status=1'
-#     )
-#     open_products = [
-#         dict(donor_Id=row[0], product_Code=row[1], blood_Group=row[2],
-#              exp_Date=row[3], product_Vol=row[4], product_id=row[5]) for row in cur.fetchall()
-#     ]
-#     cur = g.db.execute(
-#         'select donor_Id, product_Code, blood_Group, exp_Date, product_Vol, product_id from products where status=0'
-#     )
-#     closed_products = [
-#         dict(donor_Id=row[0], product_Code=row[1], blood_Group=row[2],
-#              exp_Date=row[3], product_Vol=row[4], product_id=row[5]) for row in cur.fetchall()
-#     ]
-#     g.db.close()
-#     return render_template(
-#         'products.html',
-#         form=AddProductForm(request.form),
-#         open_products=open_products,
-#         closed_products=closed_products
-#     )
+@app.route('/register/', methods=['GET', 'POST'])
+def register():
+    error = None
+    form = RegisterForm(request.form)
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            new_user = User(
+                form.name.data,
+                form.email.data,
+                form.password.data,
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Thanks for registering. Please login.')
+            return redirect(url_for('login'))
+    return render_template('register.html', form=form, error=error)
 
 
 @app.route('/products/')
@@ -102,35 +92,7 @@ def products():
     )
 
 
-    # add new product
-
-
-# @app.route('/add/', methods=['POST'])
-# @login_required
-# def new_products():
-#     g.db = connect_db()
-#     donor_Id = request.form['donor_Id']
-#     product_Code = request.form['product_Code']
-#     blood_Group = request.form['blood_Group']
-#     exp_Date = request.form['exp_Date']
-#     product_Vol = request.form['product_Vol']
-#     if not donor_Id or not product_Code or not blood_Group or not exp_Date or not product_Vol:
-#         flash("All fields are required. Please try again.")
-#         return redirect(url_for('products'))
-#     else:
-#         g.db.execute('insert into products (donor_Id, product_Code, blood_Group, exp_Date, product_Vol, status) \
-#             values (?, ?, ?, ?, ?, 1)', [
-#                 request.form['donor_Id'],
-#                 request.form['product_Code'],
-#                 request.form['blood_Group'],
-#                 request.form['exp_Date'],
-#                 request.form['product_Vol']
-#             ]
-#         )
-#         g.db.commit()
-#         g.db.close()
-#         flash('New entry was successfully posted. Thanks.')
-#         return redirect(url_for('products'))
+# add new product
 
 
 @app.route('/add/', methods=['GET', 'POST'])

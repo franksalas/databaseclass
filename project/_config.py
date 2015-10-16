@@ -4,8 +4,8 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 DATABASE = 'database.db'
-USERNAME = 'admin'
-PASSWORD = 'admin'
+# USERNAME = 'admin'
+# PASSWORD = 'admin'
 CSRF_ENABLE = True
 SECRET_KEY = 'my_precious'
 
