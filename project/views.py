@@ -95,6 +95,7 @@ def products():
 @app.route('/add/', methods=['GET', 'POST'])
 @login_required
 def new_product():
+    #error = None
     form = AddProductForm(request.form)
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -111,10 +112,10 @@ def new_product():
             db.session.commit()
             flash('New entry was successfully posted. Thanks.')
             return redirect(url_for('products'))
-    else:
-        flash('All fields are required.')
-        return redirect(url_for('products'))
-    return render_template('products.html', form=form)
+        else:
+            flash('All fields are required.')
+            return redirect(url_for('products'))
+    return render_template('products.html', form=form,)
 
 
 # Mark tasks as complete
