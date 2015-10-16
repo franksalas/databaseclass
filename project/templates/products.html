@@ -7,7 +7,8 @@
   <h3>Add a new product:</h3>
   <table>
     <tr>
-      <form action="{{ url_for('new_products') }}" method="post">
+      <form action="{{ url_for('new_product') }}" method="post">
+      {{ form.csrf_token }}
         <td>
           <input name="donor_Id" type="text" placeholder="donor id">
         </td>
