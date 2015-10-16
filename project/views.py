@@ -7,7 +7,7 @@ from flask import Flask, flash, redirect, render_template, \
     request, session, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
 from forms import AddProductForm, RegisterForm, LoginForm
-
+from sqlalchemy.exc import IntegrityError
 
 # config
 
@@ -32,7 +32,22 @@ def login_required(test):
     return wrap
 
 
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text, error), 'error')
+
+
+def open_products():
+    return db.session.query(Product).filter_by(status='1')
+
+
+def closed_products():
+    return db.session.query(Product).filter_by(status='0')
+
 # route handlers
+
 
 @app.route('/logout/')
 def logout():
@@ -72,30 +87,32 @@ def register():
                 form.email.data,
                 form.password.data,
             )
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Thanks for registering. Please login.')
-            return redirect(url_for('login'))
+            try:
+                db.session.add(new_user)
+                db.session.commit()
+                flash('Thanks for registering. Please login.')
+                return redirect(url_for('login'))
+            except IntegrityError:
+                error = 'That username and/or email already exist.'
+                return render_template('register.html', form=form, error=error)
     return render_template('register.html', form=form, error=error)
 
 
 @app.route('/products/')
 @login_required
 def products():
-    open_products = db.session.query(Product).filter_by(status='1')
-    closed_products = db.session.query(Product).filter_by(status='0')
     return render_template(
         'products.html',
         form=AddProductForm(request.form),
-        open_products=open_products,
-        closed_products=closed_products
+        open_products=open_products(),
+        closed_products=closed_products()
     )
 
 
 @app.route('/add/', methods=['GET', 'POST'])
 @login_required
 def new_product():
-    #error = None
+    error = None
     form = AddProductForm(request.form)
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -112,10 +129,13 @@ def new_product():
             db.session.commit()
             flash('New entry was successfully posted. Thanks.')
             return redirect(url_for('products'))
-        else:
-            flash('All fields are required.')
-            return redirect(url_for('products'))
-    return render_template('products.html', form=form,)
+            return render_template(
+                'products.html',
+                form=form,
+                error=error,
+                open_products=open_products(),
+                closed_products=closed_products
+                 )
 
 
 # Mark tasks as complete

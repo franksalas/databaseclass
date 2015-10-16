@@ -1,83 +1,39 @@
-{% extends "_base.html" %}
+“{% extends "_base.html" %}
 {% block content %}
 
 <h1>Welcome to Lab.co.de</h1>
 <br>
 <a href="/logout">Logout</a>
 <div class="add-task">
-  <h3>Add a new Product:</h3>
-    <form action="{{ url_for('new_product') }}" method="post">
-      {{ form.csrf_token }}
-      <p>
-      {{ form.donor_Id(placeholder="donor_Id") }}
-      <span class="error">
-        {% if form.donor_Id.errors %}
-          {% for error in form.donor_Id.errors %}
-            {{ error }}
-          {% endfor %}
-        {% endif %}
-      </span>
-      </p>
-      <p>
-      {{ form.product_Code(placeholder="product_Code") }}
-      <span class="error">
-        {% if form.product_Code.errors %}
-          {% for error in form.product_Code.errors %}
-            {{ error }}
-          {% endfor %}
-        {% endif %}
-      </span>
-      </p>
-      <p>
-      {{ form.blood_Group(placeholder="blood_Group") }}
-      <span class="error">
-        {% if form.blood_Group.errors %}
-          {% for error in form.blood_Group.errors %}
-            {{ error }}
-          {% endfor %}
-        {% endif %}
-      </span>
-      </p>
-
-      <p>
-      {{ form.exp_Date(placeholder="exp_Date") }}
-      <span class="error">
-        {% if form.exp_Date.errors %}
-          {% for error in form.exp_Date.errors %}
-            {{ error }}
-          {% endfor %}
-        {% endif %}
-      </span>
-      </p>
-      <p>
-      <p>
-      {{ form.product_Vol(placeholder="product_Vol") }}
-      <span class="error">
-        {% if form.product_Vol.errors %}
-          {% for error in form.product_Vol.errors %}
-            {{ error }}
-          {% endfor %}
-        {% endif %}
-      </span>
-      </p>
-      <p><input type="submit" value="Submit"></p>
-    </form>
+  <h3>Add a new product:</h3>
+      <form action="{{ url_for('new_product') }}" method="post">
+      {{ form.csrf_token }}     
+          <p>
+          {{ form.donor_Id.label }}: {{ form.donor_Id }}<br>
+          {{ form.product_Code.label }}: {{ form.product_Code }}<br>
+          {{ form.blood_Group.label }}: {{ form.blood_Group }}<br>
+          {{ form.exp_Date.label }}: {{ form.exp_Date }}<br>
+          {{ form.product_Vol.label }}: {{ form.product_Vol }}
+          </p>
+          <p><input type="submit" value="Submit"></p>   
+      </form>
 </div>
 <div class="entries">
   <br>
   <br>
-  <h2>Open tasks:</h2>
+  <h2>Open Products:</h2>
   <div class="datagrid">
     <table>
       <thead>
         <tr>
-         <th width="50px"><strong>Donor ID</strong></th>
+          <th width="50px"><strong>Donor ID</strong></th>
           <th width="50px"><strong>Product Code</strong></th>
           <th width="10px"><strong>Blood Group</strong></th>
           <th width="50px"><strong>Exp Date</strong></th>
           <th width="80px"><strong>Vol</strong></th>
           <th width="50px"><strong>Posted By</strong></th>
           <th><strong>Actions</strong></th>
+        </tr>
       </thead>
       {% for product in open_products %}
         <tr>
@@ -95,15 +51,16 @@
       {% endfor %}
     </table>
   </div>
-</div>
-<br>
-<br>
+  </div>
+  <br>
+  <br>
+
 <div class="entries">
   <h2>Closed Products:</h2>
   <div class="datagrid">
     <table>
       <thead>
-        <tr>
+      <tr>
           <th width="50px"><strong>Donor ID</strong></th>
           <th width="50px"><strong>Product Code</strong></th>
           <th width="10px"><strong>Blood Group</strong></th>
@@ -121,13 +78,14 @@
           <td width="50px">{{ product.exp_Date }}</td>
           <td width="80px">{{ product.product_Vol }}</td>
           <td width="50px">{{ product.poster.name }}</td>
-          <td>
-             <a href="{{ url_for('delete_entry', product_id = product.product_id) }}">Delete</a>
-          </td>
+          
+        <td>
+          <a href="{{ url_for('delete_entry', product_id = product.product_id) }}">Delete</a>
+        </td>
         </tr>
       {% endfor %}
     </table>
   </div>
-<div>
+</div>
 
 {% endblock %}
