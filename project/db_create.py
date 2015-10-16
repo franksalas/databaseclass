@@ -1,6 +1,6 @@
 # project/db_create.py
 from views import db
-from models import Product
+from models import *
 # from datetime import date
 
 

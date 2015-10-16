@@ -37,6 +37,7 @@ def login_required(test):
 @app.route('/logout/')
 def logout():
     session.pop('logged_in', None)
+    session.pop('user_id', None)
     flash('Goodbye!')
     return redirect(url_for('login'))
 
@@ -50,6 +51,7 @@ def login():
             user = User.query.filter_by(name=request.form['name']).first()
             if user is not None and user.password == request.form['password']:
                 session['logged_in'] = True
+                session['user_id'] = user.id
                 flash('Welcome!')
                 return redirect(url_for('products'))
             else:
@@ -80,19 +82,14 @@ def register():
 @app.route('/products/')
 @login_required
 def products():
-    open_products = db.session.query(Product) \
-        .filter_by(status='1').order_by(Product.exp_Date.asc())
-    closed_products = db.session.query(Product) \
-        .filter_by(status='0').order_by(Product.exp_Date.asc())
+    open_products = db.session.query(Product).filter_by(status='1')
+    closed_products = db.session.query(Product).filter_by(status='0')
     return render_template(
         'products.html',
         form=AddProductForm(request.form),
         open_products=open_products,
         closed_products=closed_products
     )
-
-
-# add new product
 
 
 @app.route('/add/', methods=['GET', 'POST'])
@@ -107,12 +104,17 @@ def new_product():
                 form.blood_Group.data,
                 form.exp_Date.data,
                 form.product_Vol.data,
-                '1'
+                '1',
+                session['user_id']
             )
             db.session.add(new_product)
             db.session.commit()
             flash('New entry was successfully posted. Thanks.')
-    return redirect(url_for('products'))
+            return redirect(url_for('products'))
+    else:
+        flash('All fields are required.')
+        return redirect(url_for('products'))
+    return render_template('products.html', form=form)
 
 
 # Mark tasks as complete
