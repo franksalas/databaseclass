@@ -129,6 +129,9 @@ def new_product():
             db.session.commit()
             flash('New entry was successfully posted. Thanks.')
             return redirect(url_for('products'))
+        else:
+            flash('All fields are required')
+            return redirect(url_for('products'))
             return render_template(
                 'products.html',
                 form=form,
@@ -155,7 +158,7 @@ def complete(product_id):
 @login_required
 def delete_entry(product_id):
     new_id = product_id
-    db.session.query(Product).filter_by(product_id=new_id).deleted
+    db.session.query(Product).filter_by(product_id=new_id).delete()
     db.session.commit()
     flash('The product was deleted.')
     return redirect(url_for('products'))
