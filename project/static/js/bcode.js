@@ -62,32 +62,27 @@ $("#typeNum").change( function(){
 
 });
 
-$("#dateNum").change( function(){
+$("#dateNum").change(function () {
 
     var fixDate = $("#dateNum").val();
-    if(fixDate.charAt(0) == '&' && fixDate.charAt(1) == '>'){
-    fixDate =fixDate.substr(3,5);
+    if (fixDate.charAt(0) == '&' && fixDate.charAt(1) == '>') {
+        fixDate = fixDate.substr(3, 5);
     };
-var yy = fixDate.slice(0,2);
-var jDate= fixDate.slice(2,5);
 
-    
-var someDate = new Date('jan 0');
-//var numberOfDaysToAdd = 198;
-//var numberofYearsToAdd = 15;
-someDate.setDate(someDate.getDate() + jDate); 
+    var yy = fixDate.slice(0, 2);
+    var jDate = fixDate.slice(2, 5);
+    var someDate = new Date("jan 0");
 
-someDate.setFullYear(someDate.getFullYear());
+    someDate.setDate(parseFloat(someDate.getDate()) + parseFloat(jDate));
+    someDate.setFullYear(parseFloat(someDate.getFullYear()) + parseFloat(yy));
 
-var dd = someDate.getDate();
-var mm = someDate.getMonth() + 1;
-var y = someDate.getFullYear();
+    var dd = someDate.getDate();
+    var mm = someDate.getMonth() + 1;
+    var y = someDate.getFullYear();
 
-var someFormattedDate = mm + '/'+dd  + '/'+ y;
-    
-    
-    
-    
-$("#dateNum").val(someFormattedDate);
+    var someFormattedDate = mm + '/' + dd + '/' + y;
+
+
+    $("#dateNum").val(someFormattedDate);
 });
 

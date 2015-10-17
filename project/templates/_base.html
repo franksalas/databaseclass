@@ -61,8 +61,7 @@
 
     <!-- scripts -->
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-    <!-- <script>
-    
+    <script >
     $("#field").change(function () {
     var changeVal = $("#field").val();
     if (changeVal.charAt(0) == '=' && changeVal.length >= 13) {
@@ -132,7 +131,7 @@ $("#dateNum").change(function () {
     var fixDate = $("#dateNum").val();
     if (fixDate.charAt(0) == '&' && fixDate.charAt(1) == '>') {
         fixDate = fixDate.substr(3, 5);
-    }
+    };
 
     var yy = fixDate.slice(0, 2);
     var jDate = fixDate.slice(2, 5);
@@ -150,9 +149,7 @@ $("#dateNum").change(function () {
 
     $("#dateNum").val(someFormattedDate);
 });
-
-      </script> -->
-
+    </script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   </body>
 </html>
