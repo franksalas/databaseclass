@@ -9,7 +9,7 @@
     <form action="{{ url_for('new_product') }}" method="post">
       {{ form.csrf_token }}
       <p>
-      {{ form.donor_Id(placeholder="donor_Id") }}
+      {{ form.donor_Id(placeholder="donor_Id", id="field") }}
       <span class="error">
         {% if form.donor_Id.errors %}
           {% for error in form.donor_Id.errors %}
@@ -19,7 +19,7 @@
       </span>
       </p>
       <p>
-      {{ form.product_Code(placeholder="product_Code") }}
+      {{ form.product_Code(placeholder="product_Code", id="prNum") }}
       <span class="error">
         {% if form.product_Code.errors %}
           {% for error in form.product_Code.errors %}
@@ -29,7 +29,7 @@
       </span>
       </p>
       <p>
-      {{ form.blood_Group(placeholder="blood_Group") }}
+      {{ form.blood_Group(placeholder="blood_Group", id="typeNum") }}
       <span class="error">
         {% if form.blood_Group.errors %}
           {% for error in form.blood_Group.errors %}
@@ -40,7 +40,7 @@
       </p>
 
       <p>
-      {{ form.exp_Date(placeholder="exp_Date") }}
+      {{ form.exp_Date(placeholder="exp_Date",id="dateNum") }}
       <span class="error">
         {% if form.exp_Date.errors %}
           {% for error in form.exp_Date.errors %}
