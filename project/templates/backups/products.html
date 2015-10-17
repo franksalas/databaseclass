@@ -3,12 +3,12 @@
 
 <h1>Welcome to Lab.co.de</h1>
 <br>
-<div class="container">
+<a href="/logout">Logout</a>
+<div class="add-task">
   <h3>Add a new Product:</h3>
-
-    <form  class="form-inline" action="{{ url_for('new_product') }}" method="post">
+    <form action="{{ url_for('new_product') }}" method="post">
       {{ form.csrf_token }}
-      
+      <p>
       {{ form.donor_Id(placeholder="donor_Id", id="field") }}
       <span class="error">
         {% if form.donor_Id.errors %}
@@ -17,8 +17,8 @@
           {% endfor %}
         {% endif %}
       </span>
-   
-     
+      </p>
+      <p>
       {{ form.product_Code(placeholder="product_Code", id="prNum") }}
       <span class="error">
         {% if form.product_Code.errors %}
@@ -27,8 +27,8 @@
           {% endfor %}
         {% endif %}
       </span>
-     
-     
+      </p>
+      <p>
       {{ form.blood_Group(placeholder="blood_Group", id="typeNum") }}
       <span class="error">
         {% if form.blood_Group.errors %}
@@ -37,9 +37,9 @@
           {% endfor %}
         {% endif %}
       </span>
-     
+      </p>
 
-    
+      <p>
       {{ form.exp_Date(placeholder="exp_Date",id="dateNum") }}
       <span class="error">
         {% if form.exp_Date.errors %}
@@ -48,9 +48,9 @@
           {% endfor %}
         {% endif %}
       </span>
-     
-     
-     
+      </p>
+      <p>
+      <p>
       {{ form.product_Vol(placeholder="product_Vol") }}
       <span class="error">
         {% if form.product_Vol.errors %}
@@ -59,36 +59,34 @@
           {% endfor %}
         {% endif %}
       </span>
-    
-      <input type="submit" value="Add">
+      </p>
+      <p><input type="submit" value="Submit"></p>
     </form>
 </div>
-
-
-<div class="container">
-
+<div class="entries">
+  <br>
   <br>
   <h2>Open tasks:</h2>
   <div class="datagrid">
-    <table class="table table-border table-hover">
+    <table>
       <thead>
         <tr>
-         <th ><strong>Donor ID</strong></th>
-          <th ><strong>Product Code</strong></th>
-          <th ><strong>Blood Group</strong></th>
-          <th ><strong>Exp Date</strong></th>
-          <th ><strong>Vol</strong></th>
-          <th ><strong>Posted By</strong></th>
+         <th width="50px"><strong>Donor ID</strong></th>
+          <th width="50px"><strong>Product Code</strong></th>
+          <th width="10px"><strong>Blood Group</strong></th>
+          <th width="50px"><strong>Exp Date</strong></th>
+          <th width="80px"><strong>Vol</strong></th>
+          <th width="50px"><strong>Posted By</strong></th>
           <th><strong>Actions</strong></th>
       </thead>
       {% for product in open_products %}
         <tr>
-          <td >{{ product.donor_Id }}</td>
-          <td >{{ product.product_Code }}</td>
-          <td >{{ product.blood_Group }}</td>
-          <td >{{ product.exp_Date }}</td>
-          <td >{{ product.product_Vol }}</td>
-          <td >{{ product.poster.name }}</td>
+          <td width="50px">{{ product.donor_Id }}</td>
+          <td width="50px">{{ product.product_Code }}</td>
+          <td width="10px">{{ product.blood_Group }}</td>
+          <td width="50px">{{ product.exp_Date }}</td>
+          <td width="80px">{{ product.product_Vol }}</td>
+          <td width="50px">{{ product.poster.name }}</td>
           <td>
             <a href="{{ url_for('delete_entry', product_id = product.product_id) }}">Delete</a>  -
             <a href="{{ url_for('complete', product_id = product.product_id) }}">Mark as Complete</a>
@@ -99,32 +97,30 @@
   </div>
 </div>
 <br>
-
-
 <br>
-<div class="container">
+<div class="entries">
   <h2>Closed Products:</h2>
   <div class="datagrid">
-    <table class="table table-border table-hover">
+    <table>
       <thead>
         <tr>
-          <th><strong>Donor ID</strong></th>
-          <th ><strong>Product Code</strong></th>
-          <th ><strong>Blood Group</strong></th>
-          <th><strong>Exp Date</strong></th>
-          <th ><strong>Vol</strong></th>
-          <th><strong>Posted By</strong></th>
+          <th width="50px"><strong>Donor ID</strong></th>
+          <th width="50px"><strong>Product Code</strong></th>
+          <th width="10px"><strong>Blood Group</strong></th>
+          <th width="50px"><strong>Exp Date</strong></th>
+          <th width="80px"><strong>Vol</strong></th>
+          <th width="50px"><strong>Posted By</strong></th>
           <th><strong>Actions</strong></th>
         </tr>
       </thead>
       {% for product in closed_products %}
         <tr>
-          <td >{{ product.donor_Id }}</td>
-          <td >{{ product.product_Code }}</td>
-          <td >{{ product.blood_Group }}</td>
-          <td >{{ product.exp_Date }}</td>
-          <td >{{ product.product_Vol }}</td>
-          <td >{{ product.poster.name }}</td>
+          <td width="50px">{{ product.donor_Id }}</td>
+          <td width="50px">{{ product.product_Code }}</td>
+          <td width="10px">{{ product.blood_Group }}</td>
+          <td width="50px">{{ product.exp_Date }}</td>
+          <td width="80px">{{ product.product_Vol }}</td>
+          <td width="50px">{{ product.poster.name }}</td>
           <td>
              <a href="{{ url_for('delete_entry', product_id = product.product_id) }}">Delete</a>
           </td>
