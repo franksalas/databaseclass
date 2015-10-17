@@ -68,7 +68,7 @@
 <div class="container">
 
   <br>
-  <h2>Open tasks:</h2>
+  <h2>Open Products:</h2>
   <div class="datagrid">
     <table class="table table-border table-hover">
       <thead>
@@ -91,11 +91,15 @@
           <td >{{ product.poster.name }}</td>
           <td>
             <a href="{{ url_for('delete_entry', product_id = product.product_id) }}">Delete</a>  -
+          
             <a href="{{ url_for('complete', product_id = product.product_id) }}">Mark as Complete</a>
+
           </td>
         </tr>
+
       {% endfor %}
     </table>
+
   </div>
 </div>
 <br>

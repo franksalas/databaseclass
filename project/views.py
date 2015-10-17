@@ -141,7 +141,6 @@ def new_product():
                  )
 
 
-# Mark tasks as complete
 @app.route('/complete/<int:product_id>/')
 @login_required
 def complete(product_id):
